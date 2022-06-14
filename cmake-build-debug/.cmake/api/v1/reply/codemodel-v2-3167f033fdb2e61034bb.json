@@ -49,8 +49,8 @@
 	"kind" : "codemodel",
 	"paths" : 
 	{
-		"build" : "C:/Users/thuli/OneDrive/Área de Trabalho/TrabalhoPraticoAEDS2/cmake-build-debug",
-		"source" : "C:/Users/thuli/OneDrive/Área de Trabalho/TrabalhoPraticoAEDS2"
+		"build" : "C:/Users/thuli/OneDrive/Área de Trabalho/TpAeds/cmake-build-debug",
+		"source" : "C:/Users/thuli/OneDrive/Área de Trabalho/TpAeds"
 	},
 	"version" : 
 	{

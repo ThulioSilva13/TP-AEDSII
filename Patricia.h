@@ -19,6 +19,7 @@ typedef struct PatriciaNo {
 
     union {
         struct {
+
             char letraNoPontoQueDifere;
             int indiceOndeDifere; /// Ha um nivel de abstracao aqui, no qual o indice da primeira letra de uma palavra eh 1
             TipoArvore Esq, Dir;  /// mas como a caontagem em strings comeca por 0, eh feita uma correcao dentro da funcao Bit
@@ -41,7 +42,7 @@ TipoArvore InsereEntre(char *palavra, TipoArvore *tree, int i, char letraNoInter
 TipoArvore InserePat(char *palavra, TipoArvore *tree, int *comparacoes);
 void Pesquisa(TipoArvore *tree, char *palavra, int *comparacoes);
 void PrintPatTree(TipoArvore *tree);
-void ContarPalavras(TipoArvore *tree, int *contador);
+int ContarPalavras(TipoArvore *arvore, char *palavra, int *contador);
 void CalcularQntMemoriaPat(TipoArvore *tree, size_t *nos);
 
 #endif //TP01AEDSII_PATRICIA_H

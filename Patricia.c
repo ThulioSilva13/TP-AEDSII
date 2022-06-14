@@ -90,64 +90,64 @@ TipoArvore InsereEntre(char *palavra, TipoArvore *tree, int i, char letraNoInter
     return (*tree);
 }
 
-TipoArvore InserePat(char *palavra, TipoArvore *tree, int *comparacoes){
+TipoArvore InserePat(char *palavra, TipoArvore *arvore, int *comparacoes){
     char letra;
     char letraDiferente;
-    TipoArvore pAjudante;
+    TipoArvore aux;
     int i;
 
     (*comparacoes)++;
-    if (*tree == NULL){
+    if (*arvore == NULL){
 
         return CriaNoExterno(palavra);
     } else {
 
-        pAjudante = *tree;
+        aux = *arvore;
         /// Verifica se o No da execucao do momento eh um No interno, caso nao seja -> nao entra no while
-        while ((*comparacoes)++ && !VerificarNoExterno(pAjudante)){
+        while ((*comparacoes)++ && !VerificarNoExterno(aux)){
 
             /// Caso o numero no NO interno seja maior que o tamanho da palavra, verificacao para evitar o acesso em posicoes invalidas
-            if ((*comparacoes)++ && pAjudante->No.NoInterno.indiceOndeDifere > strlen(palavra)){
+            if ((*comparacoes)++ && aux->No.NoInterno.indiceOndeDifere > strlen(palavra)){
                 /// Caso afirmativo, o caractere "\0" eh pego para as comparacoes
                 letra = palavra[strlen(palavra)];
             } else {
                 /// Caso contrario, pega a letra na posicao indicada pelo NO interno
-                letra = Bit(pAjudante->No.NoInterno.indiceOndeDifere, palavra);
+                letra = Bit(aux->No.NoInterno.indiceOndeDifere, palavra);
             }
             /// Pega o numero do indice onde difere no No interno e pega aquela posicao na palavra a ser inserida,
             /// depois compara com a letra guardada no No interno para decidir o caminho, maior/igual -> direita
-            if ((*comparacoes)++ && letra >= pAjudante->No.NoInterno.letraNoPontoQueDifere){
+            if ((*comparacoes)++ && letra >= aux->No.NoInterno.letraNoPontoQueDifere){
 
-                pAjudante = pAjudante->No.NoInterno.Dir;
+                aux = aux->No.NoInterno.Dir;
             } else {
 
-                pAjudante = pAjudante->No.NoInterno.Esq;
+                aux = aux->No.NoInterno.Esq;
             }
         }
         /// Caso a palavra ja esteja na arvore, eh encerrado o processo de insercao
-        if ((*comparacoes)++ && strcmp(palavra, pAjudante->No.Chave) == 0){
+        if ((*comparacoes)++ && strcmp(palavra, aux ->No.Chave) == 0){
 
             printf("Chaves sao iguais\n");
-            return (*tree);
+            return (*arvore);
         }
 
         printf("Palavra inserida!\n");
         /// Atencao, esta acessando o vetor a partir do indice 1
         i = 1;
-        while ((*comparacoes)++ && Bit(i, palavra) == Bit(i, pAjudante->No.Chave) ){
+        while ((*comparacoes)++ && Bit(i, palavra) == Bit(i, aux->No.Chave) ){
             i++;
         }
 
         /// Pega a maior letra no ponto que difere entre as duas palavras comparadas
-        if ((*comparacoes)++ && Bit(i, palavra) > Bit(i, pAjudante->No.Chave)){
+        if ((*comparacoes)++ && Bit(i, palavra) > Bit(i, aux->No.Chave)){
 
             letraDiferente = palavra[i - 1];
         } else {
 
-            letraDiferente = pAjudante->No.Chave[i - 1];
+            letraDiferente = aux->No.Chave[i - 1];
         }
 
-        return InsereEntre(palavra, tree, i, letraDiferente, comparacoes);
+        return InsereEntre(palavra, arvore, i, letraDiferente, comparacoes);
     }
 }
 
@@ -191,17 +191,22 @@ void PrintPatTree(TipoArvore *tree){
     }
 }
 
-void ContarPalavras(TipoArvore *tree, int *contador){
 
-    if (*tree != NULL){
+int ContarPalavras(TipoArvore *arvore, char *palavra, int *contador){
+
+    if (*arvore != NULL){
         /// Caso o No atual seja externo -> eh contabilizado em 1 a variavel referente a quantidade de palavras na arvore
-        if ((*tree)->idEstruturalNo == Externo){
-
-            (*contador)++;
-        } else {
-
-            ContarPalavras(&(*tree)->No.NoInterno.Esq, contador);
-            ContarPalavras(&(*tree)->No.NoInterno.Dir, contador);
+        if ((*arvore)->idEstruturalNo == Externo)
+        {
+            if(strcmp((*arvore)->No.Chave, palavra))
+            {
+                (*contador)++;
+            }
+        }
+        else
+        {
+            ContarPalavras(&(*arvore)->No.NoInterno.Esq, palavra, contador);
+            ContarPalavras(&(*arvore)->No.NoInterno.Dir, palavra, contador);
         }
     }
 }

@@ -1,6 +1,7 @@
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
+#include "Patricia.h"
 
 FILE *arquivoDeEntrada;
 FILE *arquivos;
@@ -17,7 +18,16 @@ void lerArquivos(char *nomeArquivos, int N, char *cadaArquivo, int i)
     }
     else
     {
-        printf("leu arquivo: %s\n", nomeArquivos);
+        char palavra[100];
+        TipoArvore arvore;
+        int *compara;
+        InicializarPat(&arvore);
+        while(feof(arquivos))
+        {
+            strcpy(palavra, fgetc(arquivos));
+            InserePat(palavra, &arvore, compara);
+            printf("leu arquivo: %s\n", nomeArquivos);
+        }
     }
 }
 void lerArquivoPrincipal()
