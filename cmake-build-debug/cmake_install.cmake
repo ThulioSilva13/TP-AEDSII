@@ -1,4 +1,4 @@
-# Install script for directory: C:/Users/thuli/Documents/TP-AEDS-II
+# Install script for directory: C:/Users/thuli/OneDrive/Área de Trabalho/TrabalhoPraticoAEDS2
 
 # Set the install prefix
 if(NOT DEFINED CMAKE_INSTALL_PREFIX)
@@ -45,5 +45,5 @@ endif()
 
 string(REPLACE ";" "\n" CMAKE_INSTALL_MANIFEST_CONTENT
        "${CMAKE_INSTALL_MANIFEST_FILES}")
-file(WRITE "C:/Users/thuli/Documents/TP-AEDS-II/cmake-build-debug/${CMAKE_INSTALL_MANIFEST}"
+file(WRITE "C:/Users/thuli/OneDrive/Área de Trabalho/TrabalhoPraticoAEDS2/cmake-build-debug/${CMAKE_INSTALL_MANIFEST}"
      "${CMAKE_INSTALL_MANIFEST_CONTENT}")
