@@ -1,7 +1,7 @@
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
-#include "Patricia.h"
+#include "paty.h"
 
 FILE *arquivoDeEntrada;
 FILE *arquivos;
@@ -16,19 +16,19 @@ void lerArquivos(char *nomeArquivos, int N, char *cadaArquivo, int i)
         printf("Arquivo nao encontrado!\n");
         return;
     }
-    else
-    {
-        char palavra[100];
-        TipoArvore arvore;
-        int *compara;
-        InicializarPat(&arvore);
-        while(feof(arquivos))
-        {
-            strcpy(palavra, fgetc(arquivos));
-            InserePat(palavra, &arvore, compara);
-            printf("leu arquivo: %s\n", nomeArquivos);
-        }
-    }
+    // else
+    // {
+    //     char palavra[100];
+    //     TipoArvore arvore;
+    //     int *compara;
+    //     InicializarPat(&arvore);
+    //     while(feof(arquivos))
+    //     {
+    //         strcpy(palavra, fgetc(arquivos));
+    //         InserePat(palavra, &arvore, compara);
+    //         printf("leu arquivo: %s\n", nomeArquivos);
+    //     }
+    // }
 }
 void lerArquivoPrincipal()
 {
@@ -72,11 +72,27 @@ void lerArquivoPrincipal()
 
         printf("\n%s\n", cadaArquivo[i]);
     }
+    char *t;
+    int tamanhoString = strlen(cadaArquivo[0]);
+    int count = 0;
+    printf("%d ", tamanhoString);
+    t = strtok(cadaArquivo[0], " ");
+
+    while ( t != NULL )
+    {
+        
+        printf("%s\n", t);
+        t = strtok(NULL, " ");
+        count++;
+    }
+    
 }
 
 int main()
 {
+    TipoArvoreApontador *arvorePatricia;
     int escolha = -1;
+    InicializaArvorePatricia(&arvorePatricia);
 
     while (escolha != 0)
     {
