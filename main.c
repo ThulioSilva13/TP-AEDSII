@@ -2,6 +2,7 @@
 #include <stdlib.h>
 #include <string.h>
 #include "NossaPaty.h"
+#include "time.h"
 
 FILE *arquivoDeEntrada;
 FILE *arquivos;
@@ -88,13 +89,26 @@ void lerArquivoPrincipal()
     }
     
 }
+void ResultadoPatricia(TipoArvoreApontador *arvore)
+{
+    
+    //CÓDIGO DA TÁSSIA QUE PEGA CADA PALAVRA DO ARQUIVO E SALVA NESSA VARIÁVEL PALAVRA
+    char *palavra;
+    
+    for(int i = 0; i < strlen(palavra); i++){
+        int contador = ContarPalavras(arvore, palavra);
+        printf("a palavra: %s, apareceu %d vezes", palavra, contador);
+    }
+    
 
+}
 int main()
 {
+    //FAZER UMA CONDIÇÃO PARA SABER SE VAI SER PATRICIA OU HASH
     TipoArvoreApontador *arvorePatricia;
     int escolha = -1;
     InicializaArvorePatricia(arvorePatricia);
-
+    time_t startPatricia, endPatricia;
     while (escolha != 0)
     {
         printf("\n==== MENU ======");
@@ -102,7 +116,7 @@ int main()
         printf("\n0) SAIR\n");
         printf("\nESCOLHA: ");
         scanf("%d", &escolha);
-
+        time(&startPatricia);
         switch (escolha)
         {
         case 0:
@@ -113,7 +127,9 @@ int main()
             break;
         }
     }
-
+    time(&endPatricia);
     // fclose(arquivos);
+    double time_taken = (endPatricia - startPatricia);
+    printf("tempo gasto pela Patricia foi %d", time_taken);
     return 0;
 }

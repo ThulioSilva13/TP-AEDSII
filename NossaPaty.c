@@ -85,4 +85,22 @@ TipoArvoreApontador InserePatricia(TipoArvoreApontador *arvore, char *palavraIns
         }
         return InsereEntrePatricia(palavraInserir, arvore, indice, letraQueDifere);
     }
-};
+}
+int ContarPalavras(TipoArvoreApontador *arvore, char *palavra){
+    int contador = 0;
+    if (*arvore != NULL){
+        
+        if ((*arvore)->Interno_Externo == Externo)
+        {
+            if(strcmp((*arvore)->NO.Chave, palavra))
+            {
+                (contador)++;
+            }
+        }
+        else
+        {
+            ContarPalavras(&(*arvore)->NO.NInterno.Esq, palavra);
+            ContarPalavras(&(*arvore)->NO.NInterno.Dir, palavra);
+        }
+    }
+}
