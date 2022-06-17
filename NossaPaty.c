@@ -1,8 +1,8 @@
 #include <stdlib.h>
 #include <stdio.h>
 #include <string.h>
-#include <sys/time.h>
-#include "paty.h"
+//#include <sys/time.h>
+#include "NossaPaty.h"
 
 void InicializaArvorePatricia(TipoArvoreApontador *arvore){
     *arvore = NULL;
@@ -40,12 +40,12 @@ TipoArvoreApontador InicializaNoExterno(char *palavra){
     // arvoreAux->NO.Chave = (char*) malloc (strlen(palavra) * sizeof(char));
 
 }
-TipoArvoreApontador InserePatricia(TipoArvoreApontador *arvore, char *palavraInserir){
+TipoArvoreApontador InserePatricia(TipoArvoreApontador *arvore, char *palavraInserir, int *compara){
     TipoArvoreApontador arvoreAux;
     char letra;
     char letraQueDifere;
     int tamanhoPalavraInserir;
-    tamanhoPalavraInserir = strlen(palavraInserir)
+    tamanhoPalavraInserir = strlen(palavraInserir);
 
     if (*arvore == NULL){ //se for nulo, cria o no externo
         return InicializaNoExterno(palavraInserir);
@@ -56,20 +56,21 @@ TipoArvoreApontador InserePatricia(TipoArvoreApontador *arvore, char *palavraIns
         {
             if (arvoreAux->NO.NInterno.Index > tamanhoPalavraInserir)
             {
-                letra = palavraInserir[tamanhoPalavraInserir]
+                letra = palavraInserir[tamanhoPalavraInserir];
             }
             else{
                 letra = Bit(arvoreAux->NO.NInterno.Index, palavraInserir);
             }
             if (letra < arvoreAux->NO.NInterno.LetraComparada){
-                arvoreAux = arvoreAux->NO.NInterno.esq;
+                arvoreAux = arvoreAux->NO.NInterno.Esq;
             }
             else{ //se a letra for maior ou igual que a letra comparada
-                arvoreAux = arvoreAux->NO.NInterno.dir;
+                arvoreAux = arvoreAux->NO.NInterno.Dir;
             }
         }
         if(strcmp(palavraInserir, arvoreAux->NO.Chave) == 0){
             //as palavras sao iguais, logo decidir onde inserir(direita ou esquerda)
+            *compara += 1;
             printf("As chaves são iguais\n");
         }
         int indice = 1;

@@ -1,7 +1,7 @@
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
-#include "paty.h"
+#include "NossaPaty.h"
 
 FILE *arquivoDeEntrada;
 FILE *arquivos;
@@ -16,23 +16,24 @@ void lerArquivos(char *nomeArquivos, int N, char *cadaArquivo, int i)
         printf("Arquivo nao encontrado!\n");
         return;
     }
-    // else
-    // {
-    //     char palavra[100];
-    //     TipoArvore arvore;
-    //     int *compara;
-    //     InicializarPat(&arvore);
-    //     while(feof(arquivos))
-    //     {
-    //         strcpy(palavra, fgetc(arquivos));
-    //         InserePat(palavra, &arvore, compara);
-    //         printf("leu arquivo: %s\n", nomeArquivos);
-    //     }
-    // }
+    
+
+    char palavra[100];
+    TipoArvoreApontador* arvore;
+    int *compara;
+    InicializaArvorePatricia(arvore);
+    /* for(int i = 0; i < quantidade de palavras; i ++)
+    {
+        strcpy(palavra, fgetc(arquivos));
+        InserePatricia(&arvore, palavra, compara);
+        printf("leu arquivo: %s\n", nomeArquivos);
+    } */
+    
 }
 void lerArquivoPrincipal()
 {
-    int N, i;
+    int N;
+    int i;
 
     char nomeArquivoDeEntrada[100] = "entrada.txt";
 
@@ -43,8 +44,8 @@ void lerArquivoPrincipal()
     }
     fscanf(arquivoDeEntrada, "%d", &N);
 
-    char *linhas[N];
-    char *cadaArquivo[N];
+    char *linhas;
+    char *cadaArquivo;
 
     for (i = 0; i < N; i++)
     {
@@ -59,7 +60,7 @@ void lerArquivoPrincipal()
         printf("%s\n", linhas[i]);
     }
     printf("\n==== Lendo cada arquivo dentro do arquivo principal ===== \n");
-    char *testeArq[N];
+    char *testeArq;
     for (i = 0; i < N; i++)
     {
         cadaArquivo[i] = malloc(sizeof(char) * 800);
@@ -92,7 +93,7 @@ int main()
 {
     TipoArvoreApontador *arvorePatricia;
     int escolha = -1;
-    InicializaArvorePatricia(&arvorePatricia);
+    InicializaArvorePatricia(arvorePatricia);
 
     while (escolha != 0)
     {
