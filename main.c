@@ -17,25 +17,41 @@ void lerArquivos(char *nomeArquivos, int N, char *cadaArquivo, int i)
         printf("Arquivo nao encontrado!\n");
         return;
     }
-    
+    time_t startPatricia, endPatricia, startHash, endHash;
 
     char palavra[100];
     TipoArvoreApontador* arvore;
-    int *compara;
-    InicializaArvorePatricia(arvore);
-    /* for(int i = 0; i < quantidade de palavras; i ++)
+    //Criar uma variavel do tipo tabela hash
+    for(int i = 0; i < 2; i++)
     {
-        strcpy(palavra, fgetc(arquivos));
-        InserePatricia(&arvore, palavra, compara);
-        printf("leu arquivo: %s\n", nomeArquivos);
-    } */
-    
+        if(i==0)//faz o procedimento para a ARVORE PATRICIA
+        {
+            time(&startPatricia);
+            InicializaArvorePatricia(arvore);
+            //inserir texto na arvore 
+            ResultadoPatricia(arvore);
+            time(&endPatricia);
+            double tempoPatricia = (endPatricia - startPatricia);
+            printf("o tempo de execução da arvore PATRICIA foi: %d",tempoPatricia);
+        
+        }
+        else if(i==1)
+        {
+            time(&startHash);
+            //Inicializa tabela Hash
+            //Inserir texto na tabela Hash
+            //ResultadoHash
+            time(&endHash);
+            double tempoHash = (endHash - startHash);
+            printf("O tempo de execução da tabela Hash foi: %d", tempoHash);
+        }
+    }
 }
 void lerArquivoPrincipal()
 {
     int N;
     int i;
-
+    
     char nomeArquivoDeEntrada[100] = "entrada.txt";
 
     if ((arquivoDeEntrada = fopen(nomeArquivoDeEntrada, "r")) == NULL)
@@ -89,7 +105,7 @@ void lerArquivoPrincipal()
     }
     
 }
-void ResultadoPatricia(TipoArvoreApontador *arvore)
+void ResultadoPatricia(TipoArvoreApontador *arvore)//pode precisar de mais parâmetros aqui, arquivos por exemplo
 {
     //ADICIONAR QUANTIDADE DE ARQUIVOS NA VARIÁVEL QUANTARQUIVOS 
     int quantArquivos;
@@ -108,8 +124,9 @@ int main()
     //FAZER UMA CONDIÇÃO PARA SABER SE VAI SER PATRICIA OU HASH
     TipoArvoreApontador *arvorePatricia;
     int escolha = -1;
+    int escolhaEstrutura = -1; 
     InicializaArvorePatricia(arvorePatricia);
-    time_t startPatricia, endPatricia;
+    
     while (escolha != 0)
     {
         printf("\n==== MENU ======");
@@ -117,7 +134,6 @@ int main()
         printf("\n0) SAIR\n");
         printf("\nESCOLHA: ");
         scanf("%d", &escolha);
-        time(&startPatricia);
         switch (escolha)
         {
         case 0:
@@ -128,9 +144,8 @@ int main()
             break;
         }
     }
-    time(&endPatricia);
     // fclose(arquivos);
-    double time_taken = (endPatricia - startPatricia);
-    printf("tempo gasto pela Patricia foi %d", time_taken);
+    //double time_taken = (endPatricia - startPatricia);
+    //printf("tempo gasto pela Patricia foi %d", time_taken);
     return 0;
 }
