@@ -91,17 +91,18 @@ void lerArquivoPrincipal()
 }
 void ResultadoPatricia(TipoArvoreApontador *arvore)
 {
-    
-    //CÓDIGO DA TÁSSIA QUE PEGA CADA PALAVRA DO ARQUIVO E SALVA NESSA VARIÁVEL PALAVRA
-    char *palavra;
-    
-    for(int i = 0; i < strlen(palavra); i++){
-        int contador = ContarPalavras(arvore, palavra);
-        printf("a palavra: %s, apareceu %d vezes", palavra, contador);
+    //ADICIONAR QUANTIDADE DE ARQUIVOS NA VARIÁVEL QUANTARQUIVOS 
+    int quantArquivos;
+    for(int i = 0; i < quantArquivos; i++){
+        //CÓDIGO DA TÁSSIA QUE PEGA CADA PALAVRA DO ARQUIVO E SALVA NESSA VARIÁVEL PALAVRA
+        char *palavra;
+        for(int j = 0; j < strlen(palavra); j++){
+            int contador = ContarPalavras(arvore, palavra);
+            printf("a palavra: %s, apareceu %d vezes no documento %d", palavra, contador, j+1);
+        }
     }
-    
-
 }
+
 int main()
 {
     //FAZER UMA CONDIÇÃO PARA SABER SE VAI SER PATRICIA OU HASH
