@@ -98,7 +98,7 @@ void ResultadoPatricia(TipoArvoreApontador *arvore)
         char *palavra;
         for(int j = 0; j < strlen(palavra); j++){
             int contador = ContarPalavras(arvore, palavra);
-            printf("a palavra: %s, apareceu %d vezes no documento %d", palavra, contador, j+1);
+            printf("a palavra: %s, apareceu %d vezes no documento %d", palavra, contador, i+1);
         }
     }
 }
