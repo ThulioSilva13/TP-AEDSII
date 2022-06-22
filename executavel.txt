@@ -1,2 +1,13 @@
-gcc main -o main
+gcc novaHash.c indiceInvertido.c main -o main
 ./main
+
+Para debugar:
+    gcc -g novaHash.c indiceInvertido.c main -o main
+    gdb ./main
+--Durante o debug--
+    break nomeDoArquivoQueVoceQuerDebugar.c:numerodaLinhaqvcquerdebugar
+    ex:
+    break main.c:26
+    break main.c:27
+    break main.c:28
+    run
