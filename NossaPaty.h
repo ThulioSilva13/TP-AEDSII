@@ -25,4 +25,6 @@ typedef struct TipoPatNo
 void InicializaArvorePatricia(TipoArvoreApontador *arvore);
 TipoArvoreApontador InicializaNoInterno(TipoArvoreApontador *esq, TipoArvoreApontador *dir, char letra, int indice);
 TipoArvoreApontador InicializaNoExterno(char *palavra);
-TipoArvoreApontador InserePatricia(TipoArvoreApontador *arvore, char *palavraInserir);
+TipoArvoreApontador InserePatricia(TipoArvoreApontador *arvore, char *palavraInserir, int* compara);
+TipoArvoreApontador InsereEntrePatricia(palavraInserir, arvore, indice, letraQueDifere);
+int ContarPalavras(TipoArvoreApontador *arvore, char *palavra);
