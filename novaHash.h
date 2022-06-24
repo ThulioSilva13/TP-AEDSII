@@ -12,7 +12,6 @@ typedef unsigned TipoPesos[X][TAMALFABETO];
 typedef struct TipoItem
 {
     TipoPalavra Chave;
-    int qntd_repete;
 } TipoItem;
 typedef unsigned int TipoIndice;
 typedef struct TipoCelula *TipoApontador;
@@ -28,8 +27,8 @@ typedef struct TipoLista
 typedef TipoLista TipoDicionario[Y];
 
 void InicializaListaVazia(TipoLista *Lista);
-short Vazia(TipoLista Lista);
-void Insere(TipoItem item, TipoLista *Lista, int num_arquivo);
+short VaziaHash(TipoLista Lista);
+void InsereHash(TipoItem item, TipoLista *Lista, int num_arquivo);
 void GeraPesos(TipoPesos peso);
 TipoIndice h(TipoPalavra Chave, TipoPesos peso);
 void InicializaDicionario(TipoDicionario dicionario);
@@ -39,3 +38,5 @@ void ImprimirLista(TipoLista Lista);
 void ImprimeTabela(TipoDicionario Tabela);
 char *BuscaLista(TipoLista Lista);
 char *BuscaTabela(TipoDicionario Tabela);
+
+// TipoApontadorEnc VerificaIgual(char *chave);

@@ -3,7 +3,7 @@
 #include <string.h>
 #include <ctype.h>
 // #include <math.h>
-// #include "NossaPaty.h"
+#include "NossaPaty.h"
 // #include "myHash.h"
 // #define maxBits 36000
 #include "novaHash.h"
@@ -18,6 +18,10 @@ TipoPesos peso;
 TipoApontador Apontador;
 
 TipoListaEnc listaEnc;
+
+TipoListaQntd listaQnd;
+
+TipoArvoreApontador arvore;
 
 void minusculo(char s1[], char s2[])
 {
@@ -98,18 +102,48 @@ void InsereHashEIndice(char **cadaFrase, int N)
         t = strtok(cadaFrase[i], " ");
         while (t != NULL)
         {
-
             int tamanhoPalavra = strlen(t);
             char t_minusculo[tamanhoPalavra];
             minusculo(t, t_minusculo);
             printf("\n===========\n");
             printf("%s ", t);
+            printf("num_arquivo: %d\n", num_arquivo);
             printf("%s\n", t_minusculo);
             GeraPesos(peso);
 
             strcpy(itemH.Chave, t_minusculo);
             // item.numArquivoHash = i + 1;
+            // InserePatricia(TipoArvoreApontador * arvore, char *palavraInserir, int *compara);
             VerificaInsere(itemH, peso, Tabela, num_arquivo);
+            printf("\n-----------\n");
+            // printf("\nsomafinal: %Lf", (long double)soma);
+            t = strtok(NULL, " ");
+        }
+    }
+}
+
+void InserePatriciaAAAAA(char **cadaFrase, int N){
+    // InserePatricia(TipoArvoreApontador * arvore, char *palavraInserir, int *compara);
+    int i;
+    char *t;
+    for (i = 0; i < N; i++)
+    {
+        // t -> cada palavra do arquivo
+        int num_arquivo = i + 1;
+        t = strtok(cadaFrase[i], " ");
+        while (t != NULL)
+        {
+            int tamanhoPalavra = strlen(t);
+            char t_minusculo[tamanhoPalavra];
+            minusculo(t, t_minusculo);
+            printf("\n===========\n");
+            printf("num_arquivo: %d\n", num_arquivo);
+            printf("palavra: %s\n", t_minusculo);
+      
+            // strcpy(itemH.Chave, t_minusculo);
+            // item.numArquivoHash = i + 1;
+            InserePatricia(&arvore, t_minusculo);
+            // VerificaInsere(itemH, peso, Tabela, num_arquivo);
             printf("\n-----------\n");
             // printf("\nsomafinal: %Lf", (long double)soma);
             t = strtok(NULL, " ");
@@ -127,7 +161,8 @@ void ImprimeFrasesArquivos(char **cadaFrase, int N)
 int main()
 {
     InicializaDicionario(Tabela);
-    FLVazia(&listaEnc);
+    FLVaziaIndice(&listaEnc);
+    InicializaArvorePatricia(&arvore);
 
     int escolha = -1;
     int i;
@@ -136,7 +171,7 @@ int main()
     char **cadaFrase;
     N = lerArquivoPrincipal();
 
-    cadaFrase = (char **)malloc(sizeof(char) * N);
+    cadaFrase = (char **)malloc(sizeof(char) * 900);
 
     while (escolha != 0)
     {
@@ -146,7 +181,9 @@ int main()
         printf("\n3) INSERE TABELA HASH E INDICE\n");
         printf("\n4) IMPRIME TABELA\n");
         printf("\n5) IMPRIME INDICE\n");
+        printf("\n6) INSERE PATRICIA\n");
         printf("\n0) SAIR\n");
+
         printf("\nESCOLHA: ");
         scanf("%d", &escolha);
 
@@ -160,7 +197,7 @@ int main()
             {
                 cadaFrase[i] = lerArquivosFrases(N);
             }
-            printf("Arquivos lidos com sucesso!");
+            printf("Arquivos lidos com sucesso!\n");
             fclose(arquivoDeEntrada);
             break;
         case 2:
@@ -174,6 +211,10 @@ int main()
             break;
         case 5:
             ImprimeEnc(listaEnc);
+            // ImprimeQntd(listaQnd);
+            break;
+        case 6:
+            InserePatriciaAAAAA(cadaFrase, N);
             break;
         }
     }

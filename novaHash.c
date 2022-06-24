@@ -3,8 +3,12 @@
 #include <string.h>
 #include "novaHash.h"
 #include "indiceInvertido.h"
+// #include "qntdEnc.h"
+
 TipoItemEnc itemEnc;
 TipoListaEnc listaEnc;
+
+TipoListaQntd listaQntd;
 
 void InicializaListaVazia(TipoLista *Lista)
 {
@@ -13,25 +17,26 @@ void InicializaListaVazia(TipoLista *Lista)
     Lista->Primeiro->Proximo = NULL;
 }
 
-short Vazia(TipoLista Lista)
+short VaziaHash(TipoLista Lista)
 {
     return (Lista.Primeiro == Lista.Ultimo);
 }
 
-void Insere(TipoItem item, TipoLista *Lista, int num_arquivo)
+void InsereHash(TipoItem item, TipoLista *Lista, int num_arquivo)
 {
-    printf("Palavra a ser inserida: %s ", item.Chave);
+    // printf("Palavra a ser inserida: %s\n", item.Chave);
+    // printf("NumArqvs: %d", num_arquivo);
 
     Lista->Ultimo->Proximo = (TipoCelula *)malloc(sizeof(TipoCelula));
     Lista->Ultimo = Lista->Ultimo->Proximo;
     strcpy(Lista->Ultimo->ItemH.Chave, item.Chave);
-    Lista->Ultimo->ItemH.qntd_repete = 1;
 
     //==== insere indice invertido =====
     strcpy(itemEnc.Chave,item.Chave);
-    itemEnc.qntd_repete = 1;
-    itemEnc.numArquivoIndice = num_arquivo;
-    InsereEnc(itemEnc, &listaEnc, num_arquivo);
+    itemEnc.qntd.qntd_repete = 1;
+    itemEnc.qntd.idDoc = num_arquivo;
+    itemEnc.qntdTotalRepete = 1;
+    InsereEnc(itemEnc, &listaEnc);
     printf("=> Palavra inserida!\n");
     Lista->Ultimo->Proximo = NULL;
 
@@ -84,22 +89,25 @@ void InicializaDicionario(TipoDicionario dicionario)
         InicializaListaVazia(&dicionario[i]);
 }
 
+// =================== OLHAR AQUI !!!!!!!!!!!!!!!!
 TipoApontador Pesquisa(TipoPalavra Chave, TipoPesos peso, TipoDicionario dicionario)
 { /* Obs.: TipoApontador de retorno aponta para o item anterior da lista */
     TipoIndice i;
     TipoApontador Apontador;
+    TipoApontadorEnc ApontEnc;
     i = h(Chave, peso);
-    if (Vazia(dicionario[i]))
+    if (VaziaHash(dicionario[i]))
         return NULL; /* Pesquisa sem sucesso */
     else
-    
     {
         Apontador = dicionario[i].Primeiro;
+        // ApontEnc = 
         while (Apontador->Proximo->Proximo != NULL && strncmp(Chave, Apontador->Proximo->ItemH.Chave, sizeof(TipoPalavra)))
             Apontador = Apontador->Proximo;
         if (!strncmp(Chave, Apontador->Proximo->ItemH.Chave, sizeof(TipoPalavra)))
             {
-                Apontador->Proximo->ItemH.qntd_repete += 1;
+                // Apontador->Proximo->ItemH.qntd_repete += 1;
+                // ApontEnc->Prox->Item.qntd.qntd_repete += 1;
                 return Apontador;
             }
         else{
@@ -108,34 +116,326 @@ TipoApontador Pesquisa(TipoPalavra Chave, TipoPesos peso, TipoDicionario diciona
             
     }
 }
+// repetindo o ninguem por causa de inicio de arquivo
+// nao ta printando todos os valores do qntdEnc 
+// provavelmente porque ta printando o tamanho da lista encadeada
+// entao tem q trocar o print pra printar o tamanho da qntdEncs
+
+
+// --------> olhar se insere de novo no indice invertido (e se isso acontece, tirar)
+// se vier outra palavra repetida, percorre a lista de ocorrencias p fzr os trem la
+// TipoApontadorEnc VerificaIgual(char *chave, int num_arquivo){
+//     TipoApontadorEnc Aux;
+//     TipoApontadorQntd AuxQntd;
+//     AuxQntd = listaQntd.Primeiro->Prox;
+//     Aux = listaEnc.Primeiro->Prox;
+
+//     while (Aux != NULL)
+//     {
+//         if (strcmp(chave, Aux->Item.Chave) == 0){
+//             // printf("\n======Verifica Igual =========\n");
+//             // printf("%s = %s ", chave, Aux->Item.Chave);
+//             // casa <1,1>
+//             // casa <2,1>
+//             if (Aux->Item.qntd.idDoc == num_arquivo){
+//                 AuxQntd->Item.qntd_repete += 1;
+//             }
+//             else{
+//                 itemQntd.idDoc = num_arquivo;
+//                 itemQntd.qntd_repete = 1;
+//                 InsereQntd(itemQntd, &listaQntd);
+//             }
+        
+                
+
+//                 // while (Aux != NULL)
+//                 // {
+//                 //     // if (strcmp(item.Chave, AuxAp->Item.Chave) == 0)
+//                 //     // {
+//                 //     if (Aux->Item.qntd.idDoc == num_arquivo)
+//                 //     {
+//                 //         // AuxAp->Item.qntd.qntd_repete += 1;
+//                 //         // AuxQntd->Item.qntd_repete += 1;
+//                 //     }
+//                 //     // }
+//                 //     AuxQntd = AuxQntd->Prox;
+//                 // }
+
+//                 // return Aux;
+//         }
+//         Aux = Aux->Prox;
+//         AuxQntd = AuxQntd->Prox;
+//     }
+//     return NULL;
+// }
 
 void VerificaInsere(TipoItem item, TipoPesos peso, TipoDicionario dicionario, int num_arquivo)
 {
     // printf("(palavra: %s) peso: (%u)\n", item.Chave, peso);
     if (Pesquisa(item.Chave, peso, dicionario) == NULL){
-        printf("Inserindo: %s\n", item.Chave);
-        Insere(item, &dicionario[h(item.Chave, peso)], num_arquivo);
+        // printf("Inserindo: %s\n", item.Chave);
+        InsereHash(item, &dicionario[h(item.Chave, peso)], num_arquivo);
     }
-    else{
+    else{ //entra no else se a palavra ja existir na hash
         TipoApontadorEnc Aux;
-        printf("\nvalor busca: %s", item.Chave);
+        TipoApontadorQntd AuxQntd;
+        TipoItemQntd itemQntd;
+        // TipoListaEnc listaEnc;
+        // TipoApontadorEnc
+
+        // printf("\nvalor busca: %s", item.Chave);
+        // faz uma funcao IdentificarDocumento e retorna como apontador do indice (se for diferente de nulo, incrementa)
+        //pra encontrar o id doc faz la a funcao do print (indice lista apontador aux, se o aux do documento == ao documento q chega)
+        // printf("chave chegando")
+        // Aux = listaEnc.Primeiro->Prox;
+        // AuxQntd = listaQntd.Primeiro->Prox;
+
+        AuxQntd = listaQntd.Primeiro->Prox;
         Aux = listaEnc.Primeiro->Prox;
+        printf("-----Chave A: %s ", item.Chave);
         while (Aux != NULL)
         {
+            printf("Chave B: %s\n", Aux->Item.Chave);
             if (strcmp(item.Chave, Aux->Item.Chave) == 0)
             {
-                Aux->Item.qntd_repete += 1;
-                return;
+                if (Aux->Item.qntd.idDoc == num_arquivo)
+                {
+                    AuxQntd->Item.qntd_repete += 1;
+                }
+                else
+                {
+                
+                    printf("-----Entrou Else-----\n");
+                    printf("-----Aux->Item.qntd.idDoc: %d\n", Aux->Item.qntd.idDoc);
+                    printf("-----num_arquivo-: %d\n", num_arquivo);
+                    // while (AuxQntd != NULL)
+                    // {
+                    //     // AuxQntd->Item.
+                    // }
+                    
+                    // printf("entrou else if ------------------\n");
+                    // AuxQntd->Item.qntd_repete += 1;
+                    itemQntd.idDoc = num_arquivo;
+                    itemQntd.qntd_repete = 1;
+                    InsereQntd(itemQntd, &listaQntd);
+                }
+                
+                // {
+                //     itemQntd.idDoc = num_arquivo;
+                //     itemQntd.qntd_repete = 1;
+                //     InsereQntd(itemQntd, &listaQntd);
+                // }
+
+                // while (Aux != NULL)
+                // {
+                //     // if (strcmp(item.Chave, AuxAp->Item.Chave) == 0)
+                //     // {
+                //     if (Aux->Item.qntd.idDoc == num_arquivo)
+                //     {
+                //         // AuxAp->Item.qntd.qntd_repete += 1;
+                //         // AuxQntd->Item.qntd_repete += 1;
+                //     }
+                //     // }
+                //     AuxQntd = AuxQntd->Prox;
+                // }
+
+                // return Aux;
             }
-            else
-            {
-                Aux = Aux->Prox;
-            }
-        }
-        printf(" Registro ja  esta  presente: %s\n", item.Chave);
-    }
+            Aux = Aux->Prox;
+            AuxQntd = AuxQntd->Prox;
+            // int count = 0;
+            // if (AuxAp != NULL)
+            // {
+            // //    printf("%s ", AuxAp->Item.Chave);
+
+            //     // count++;
+            //     // printf("%d ", count);
+
+            //     // printf("\n======AUXAP=======\n");
+            //     // printf("%s ", AuxAp->Item.Chave);
+            //     // printf("%d %d\n", AuxAp->Item.qntd.qntd_repete, AuxAp->Item.qntd.idDoc);
+            //     while (AuxQntd != NULL)
+            //     {
+            //         // if (strcmp(item.Chave, AuxAp->Item.Chave) == 0)
+            //         // {
+            //             if (AuxQntd->Item.idDoc == num_arquivo)
+            //             {
+            //                 // AuxAp->Item.qntd.qntd_repete += 1;
+            //                 AuxQntd->Item.qntd_repete += 1;
+            //             }
+            //         // }
+            //         AuxQntd = AuxQntd->Prox;
+            //     }
+
+            //     // AuxAp = AuxAp->Prox;
+            // }
         
+            /* code */
+        
+        
+        // while (Aux != NULL)
+        // {
+            // if (strcmp(item.Chave, Aux->Item.Chave) == 0){
+                
+
+            // }
+            // printf("\n=========== comeca =========\n");
+            // printf("\npalavra Chegando: %s\n", item.Chave);
+            // printf("idDoc Chegando: %d\n", num_arquivo);
+            // printf("AuxQntd->Item.idDoc: %d\n", AuxQntd->Item.idDoc);
+
+            // printf("chave: %s\n", item.Chave);
+            // printf("aux chave: %s", Aux->Item.Chave);
+            
+            // if (strcmp(item.Chave, Aux->Item.Chave) == 0){
+            //     if (Aux->Item.qntd.idDoc == num_arquivo)
+            //     {
+            //         printf("entra iffffffffffffffffffffffffffffff");
+            //         AuxQntd->Item.qntd_repete += 1;
+            //         // Aux->Item.qntd.qntd_repete += 1;
+            //         // return;
+            //         //
+            //     }
+                //  AuxQntd->Item.qntd_repete += 1;
+            // }
+            
+            // else{
+            //     if (strcmp(item.Chave, Aux->Item.Chave) == 0){
+            //         itemQntd.idDoc = num_arquivo;
+            //         itemQntd.qntd_repete = 1;
+            //         InsereQntd(itemQntd, &listaQntd);
+            //     }
+            // }
+            // AuxQntd = AuxQntd->Prox;
+            // else
+            // {
+            //     itemQntd.idDoc = num_arquivo;
+            //     itemQntd.qntd_repete = 1;
+            //     InsereQntd(itemQntd, &listaQntd);
+        }
+    }
+
+            // {
+            //     //   printf("entra!!!!!!!!!!!!");
+            //     // Aux->Item.qntdTotalRepete+=1;
+            //     // qntdRepeteTOTAL = Aux->Item.qntdTotalRepete;
+            //     // printf("qntdRepeteTotal: %d\n", qntdRepeteTOTAL);
+                
+            //         // AuxQntd->Item.qntd_repete += 1;
+                   
+            //     // else{
+            //     //     strcpy(itemEnc.Chave, Aux->Item.Chave);
+            //     //     itemEnc.qntd.qntd_repete = 1;
+            //     //     itemEnc.qntd.idDoc = num_arquivo;
+
+            //     //     InsereEnc(itemEnc, &listaEnc); //[ ]
+            //     //     // }
+            //     //         // return;
+            //     // }
+            //     return;
+            // }
+            
+            // AuxQntd = AuxQntd->Prox;
+            //   
+
+            //     // if(AuxQntd->Item.qntd_repete > 1 ){
+            //     //     Aux = Aux->Prox;
+            //     //     AuxQntd = AuxQntd->Prox;
+            //     // }
+
+            //     // Aux->Item.qntdTotalRepete += 1;
+            //     // qntdRepeteTOTAL = itemEnc.qntdTotalRepete;
+            //     // printf("qntdTotal %d ", qntdRepeteTOTAL);
+            //     if (AuxQntd->Item.idDoc == num_arquivo)
+            //     {
+            //         // AuxQntd->Item.qntd_repete += 1;
+            //         if (AuxQntd != NULL)
+            //         {
+            //             AuxQntd->Item.qntd_repete += 1;
+            //         }
+            //     }
+            //     else
+            //     {
+            //         // while (qntdRepeteTOTAL != 1)
+            //         // {
+            //         //     // while (Aux->Prox != NULL)
+            //         //     // {
+            //         //         if (strcmp(item.Chave, Aux->Prox->Item.Chave) == 0){
+            //         //             strcpy(chave, Aux->Prox->Item.Chave);
+            //         //             qntdRepeteTOTAL--;
+            //         //         }
+            //         //     // }
+                        
+            //         // }
+            //         printf("chave: %s", chave);
+            //         strcpy(itemEnc.Chave, Aux->Item.Chave);
+            //         itemEnc.qntd.qntd_repete = 1;
+            //         itemEnc.qntd.idDoc = num_arquivo;
+
+            //         InsereEnc(itemEnc, &listaEnc); //[ ]
+            //     }
+            //     return;
+            // }
+            // else{
+                
+            // }
+            
+               
+            
+            
+            // else
+            // {
+            //             //se forem de arquivos DIFERENTES
+            //             //
+            //             strcpy(itemEnc.Chave, Aux->Item.Chave);
+            //             itemEnc.qntd.qntd_repete =  1;
+            //             itemEnc.qntd.idDoc = num_arquivo;
+
+            //             InsereEnc(itemEnc, &listaEnc); //[ ]
+            // }
+
+                
+
+                // if (strcmp(item.Chave, Aux->Item.Chave) == 0) // verifica se a palavra esta sendo repetida no INDICE invertido
+                // {
+                //     // printf("Chave: %s\n", Aux->Item.Chave);
+                //     // printf("AuxQntdItem = %d\n", AuxQntd->Item.idDoc);
+                //     // printf("itemEncQntd = %d\n ", itemEnc.qntd.idDoc);
+
+                //     // printf("AuxQntdItem - Repete = %d\n", AuxQntd->Item.qntd_repete);
+                //     // printf("itemEncQntd - Repete = %d\n ", itemEnc.qntd.qntd_repete);
+
+                //     // printf("numero_arquivoInsere = %d\n ", num_arquivo);
+
+                //     // se as mesmas palavras são do MESMO arquivo, entra no if:
+                //     if (AuxQntd->Item.idDoc == num_arquivo)
+                //     {
+                //         // incrementa dizendo que repete NESSE ARQUIVO ESPECIFICO
+                //         AuxQntd->Item.qntd_repete += 1;
+                //         // printf("\nchave: %s, repete: %d", Aux->Item.Chave, AuxQntd->Item.qntd_repete);
+                //     }
+                //     else{
+                //         //se forem de arquivos DIFERENTES
+                //         //
+                //         strcpy(itemEnc.Chave, Aux->Item.Chave);
+                //         itemEnc.qntd.qntd_repete =  1;
+                //         itemEnc.qntd.idDoc = num_arquivo;
+
+                //         InsereEnc(itemEnc, &listaEnc); //[ ]
+                //     }
+
+                //     return;
+                // }
+                // else
+                // {
+                //     Aux = Aux->Prox;
+                //     AuxQntd = AuxQntd->Prox;
+                // }
+            
+        // printf(" Registro ja  esta  presente: %s\n", item.Chave);
 }
+        
+
 
 // void Retira(TipoItem item, TipoPesos peso, TipoDicionario dicionario)
 // {
@@ -146,7 +446,52 @@ void VerificaInsere(TipoItem item, TipoPesos peso, TipoDicionario dicionario, in
 //     else
 //         Ret(Apontador, &dicionario[h(item.Chave, peso)], &item);
 // }
+// char* BuscaIndice(TipoLista Lista)
+// {
+//     TipoApontador ApontadorAux;
+//     ApontadorAux = Lista.Primeiro->Proximo;
+//     while (ApontadorAux != NULL)
+//     {
+//         // printf("|%.*s|", X, ApontadorAux->Item.Chave);
+//         ApontadorAux->ItemH.Chave;
+//         ApontadorAux = ApontadorAux->Proximo;    
+//     }
+//     TipoApontadorEnc Aux;
+//     TipoApontadorQntd AuxQntd;
+//     TipoItemQntd itemQntd;
 
+//     Aux = listaEnc.Primeiro->Prox;
+//     AuxQntd = listaQntd.Primeiro->Prox;
+
+//     while (Aux != NULL)
+//     {
+//         int count = 0;
+//         if (strcmp(item.Chave, Aux->Item.Chave) == 0)
+//         {
+//             if (AuxQntd->Item.idDoc == num_arquivo)
+//             {
+//                 if (AuxQntd != NULL)
+//                 {
+//                     AuxQntd->Item.qntd_repete += 1;
+//                 }
+//             }
+//             else
+//             {
+//                 strcpy(itemEnc.Chave, Aux->Item.Chave);
+//                 itemEnc.qntd.qntd_repete = 1;
+//                 itemEnc.qntd.idDoc = num_arquivo;
+
+//                 InsereEnc(itemEnc, &listaEnc); //[ ]
+//             }
+//             return;
+//         }
+//         else
+//         {
+//             Aux = Aux->Prox;
+//             AuxQntd = AuxQntd->Prox;
+//         }
+//     }
+// }
 char* BuscaLista(TipoLista Lista)
 {
     TipoApontador ApontadorAux;
@@ -180,10 +525,10 @@ void ImprimirLista(TipoLista Lista)
 
     while (ApontadorAux != NULL)
     {
-        // printf("repete: %d ", ApontadorAux->ItemH.qntd_repete);
         printf("|%.*s|", X, ApontadorAux->ItemH.Chave);
         ApontadorAux = ApontadorAux->Proximo;
     }
+    
 }
 
 void ImprimeTabela(TipoDicionario Tabela)
@@ -192,7 +537,7 @@ void ImprimeTabela(TipoDicionario Tabela)
     for (i = 0; i < Y; i++)
     {
         printf("%d : ", i);
-        if (!Vazia(Tabela[i]))
+        if (!VaziaHash(Tabela[i]))
             {
                 ImprimirLista(Tabela[i]);
             }

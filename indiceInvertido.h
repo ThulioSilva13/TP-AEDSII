@@ -2,6 +2,7 @@
 #include <stdlib.h>
 #include <stdio.h>
 #include <string.h>
+#include "qntdEnc.h"
 #define MAX 10
 
 /* ========================================================================= */
@@ -9,11 +10,11 @@
 // typedef struct TipoQntdEnc *
 typedef char TipoChaveEnc[X];
 typedef int TipoRepete;
-typedef struct
+typedef struct TipoItemEnc
 {
     TipoChaveEnc Chave;
-    TipoRepete qntd_repete;
-    int numArquivoIndice;
+    TipoItemQntd qntd;
+    int qntdTotalRepete;
     // int numArquivoIndice;
     /* outros componentes */
 } TipoItemEnc;
@@ -32,8 +33,8 @@ typedef struct TipoListaEnc
 } TipoListaEnc;
 
 /* ========================================================================= */
-void FLVazia(TipoListaEnc *Lista);
+void FLVaziaIndice(TipoListaEnc *Lista);
 int VaziaEnc(TipoListaEnc Lista);
 int Busca(TipoListaEnc Lista, char *valor_busca);
-void InsereEnc(TipoItemEnc item, TipoListaEnc *Lista, int numArquivoIndice);
+void InsereEnc(TipoItemEnc item, TipoListaEnc *Lista);
 void ImprimeEnc(TipoListaEnc Lista);

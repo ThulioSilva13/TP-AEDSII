@@ -1,4 +1,4 @@
-typedef unsigned char TipoChave[30]; /* a definir, dependendo da aplicacao */
+typedef unsigned char *TipoChave; /* a definir, dependendo da aplicacao */
 typedef unsigned char TipoIndexAmp;
 typedef unsigned char TipoDib;
 typedef enum
@@ -25,6 +25,9 @@ typedef struct TipoPatNo
 void InicializaArvorePatricia(TipoArvoreApontador *arvore);
 TipoArvoreApontador InicializaNoInterno(TipoArvoreApontador *esq, TipoArvoreApontador *dir, char letra, int indice);
 TipoArvoreApontador InicializaNoExterno(char *palavra);
-TipoArvoreApontador InserePatricia(TipoArvoreApontador *arvore, char *palavraInserir, int* compara);
-TipoArvoreApontador InsereEntrePatricia(palavraInserir, arvore, indice, letraQueDifere);
+TipoArvoreApontador InserePatricia(TipoArvoreApontador *arvore, char *palavraInserir);
+TipoArvoreApontador InsereEntrePatricia(char *palavra, TipoArvoreApontador *arvore, int indice, char letraQueDifere);
 int ContarPalavras(TipoArvoreApontador *arvore, char *palavra);
+
+TipoArvoreApontador CriaNoInterno(int i, TipoArvoreApontador *Esq, TipoArvoreApontador *Dir, char letra);
+TipoArvoreApontador CriaNoExterno(char *palavra);
