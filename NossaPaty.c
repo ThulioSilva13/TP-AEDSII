@@ -1,7 +1,7 @@
 #include <stdlib.h>
 #include <stdio.h>
 #include <string.h>
-//#include <sys/time.h>
+#include <sys/time.h>
 #include "NossaPaty.h"
 
 void InicializaArvorePatricia(TipoArvoreApontador *arvore){
@@ -35,24 +35,22 @@ TipoArvoreApontador InicializaNoExterno(char *palavra){
     arvoreAux = (TipoArvoreApontador)malloc(sizeof(TipoPatNo));
 
     arvoreAux->Interno_Externo = Externo;
+    arvoreAux->NO.Chave = (char*) malloc (strlen(palavra) * sizeof(char));
+
     strcpy(arvoreAux->NO.Chave, palavra);
     return arvoreAux;
-    // arvoreAux->NO.Chave = (char*) malloc (strlen(palavra) * sizeof(char));
-
 }
-TipoArvoreApontador InserePatricia(TipoArvoreApontador *arvore, char *palavraInserir)
-{
+
+TipoArvoreApontador InserePatricia(TipoArvoreApontador *arvore, char *palavraInserir){
     TipoArvoreApontador arvoreAux;
     char letra;
     char letraQueDifere;
     int tamanhoPalavraInserir = strlen(palavraInserir);
 
-    if (*arvore == NULL)
-    { // se for nulo, cria o no externo
+    if (*arvore == NULL){ //se for nulo, cria o no externo
         return InicializaNoExterno(palavraInserir);
     }
-    else
-    {
+    else{
         arvoreAux = *arvore;
         while (!VerificaSeNoExterno(arvoreAux))
         {
@@ -60,144 +58,87 @@ TipoArvoreApontador InserePatricia(TipoArvoreApontador *arvore, char *palavraIns
             {
                 letra = palavraInserir[tamanhoPalavraInserir];
             }
-            else
-            {
+            else{
                 letra = Bit(arvoreAux->NO.NInterno.Index, palavraInserir);
             }
-            if (letra < arvoreAux->NO.NInterno.LetraComparada)
-            {
+            if (letra < arvoreAux->NO.NInterno.LetraComparada){
                 arvoreAux = arvoreAux->NO.NInterno.Esq;
             }
-            else
-            { // se a letra for maior ou igual que a letra comparada
+            else{ //se a letra for maior ou igual que a letra comparada
                 arvoreAux = arvoreAux->NO.NInterno.Dir;
             }
         }
-        // if (strcmp(palavraInserir, arvoreAux->NO.Chave) == 0)
-        // {
-        //     // as palavras sao iguais, logo decidir onde inserir(direita ou esquerda)
-        //     *compara += 1;
-        //     // printf("As chaves sÃ£o iguais\n");
-        //     // adicionar no indice invertido
-        // }
+        if(strcmp(palavraInserir, arvoreAux->NO.Chave) == 0){
+            //as palavras sao iguais, logo decidir onde inserir(direita ou esquerda)    
+            //printf("As chaves são iguais\n");
+           //adicionar no indice invertido
+        }
         int indice = 1;
-
-        while (Bit(indice, palavraInserir) == Bit(indice, arvoreAux->NO.Chave))
-        {
+        
+        while(Bit(indice,palavraInserir) == Bit(indice, arvoreAux->NO.Chave)){
             indice = indice + 1;
         }
-        if (Bit(indice, palavraInserir) > Bit(indice, arvoreAux->NO.Chave))
-        {
+        if(Bit(indice, palavraInserir) > Bit(indice, arvoreAux->NO.Chave)){
             letraQueDifere = palavraInserir[indice - 1];
-        }
-        else
-        {
+        } else{
             letraQueDifere = arvoreAux->NO.Chave[indice - 1];
         }
         return InsereEntrePatricia(palavraInserir, arvore, indice, letraQueDifere);
     }
 }
-TipoArvoreApontador CriaNoExterno(char *palavra)
-{
-    TipoArvoreApontador aux;
-    int tamanhoPalavra = strlen(palavra);
 
-    aux = (TipoArvoreApontador)malloc(sizeof(TipoPatNo));
 
-    aux->NO.Chave = (char*)malloc(sizeof(char) * tamanhoPalavra);
-    // = ;
 
-    aux->Interno_Externo = Externo;
-    strcpy(aux->NO.Chave, palavra);
-
-    return aux;
-}
-TipoArvoreApontador CriaNoInterno(int i, TipoArvoreApontador *Esq, TipoArvoreApontador *Dir, char letra)
-{
-    /// Variavel i -> indice onde as palavras se diferem
-    /// Variavel letra -> letra escolhida para ser armazenada no NO interno
-    TipoArvoreApontador aux;
-    aux = (TipoArvoreApontador)malloc(sizeof(TipoPatNo));
-
-    aux->Interno_Externo = Interno;
-    aux->NO.NInterno.Esq = *Esq;
-    aux->NO.NInterno.Dir = *Dir;
-
-    aux->NO.NInterno.Index = i;
-    aux->NO.NInterno.LetraComparada = letra;
-
-    return aux;
-}
-TipoArvoreApontador InsereEntrePatricia(char *palavra, TipoArvoreApontador *arvore, int indice, char letraQueDifere)
-{
+TipoArvoreApontador InsereEntrePatricia(char *palavra, TipoArvoreApontador *arvore, int indice, char letraQueDifere){
     TipoArvoreApontador arvoreAux;
-
     /// Verifica se o NO da chamada atual eh um NO externo
-    if (VerificaSeNoExterno(*arvore))
-    {
+    if (VerificaSeNoExterno(*arvore)){
 
-        arvoreAux = CriaNoExterno(palavra);
+        arvoreAux = InicializaNoExterno(palavra);
         /// Verifica qual das letras eh maior na posicao i, vai para a direita se for maior ou igual
-        if (Bit(indice, palavra) >= Bit(indice, (*arvore)->NO.Chave))
-        {
+        if (Bit(indice, palavra) >= Bit(indice, (*arvore)->NO.Chave)) {
 
-            return (CriaNoInterno(indice, arvore, &arvoreAux, letraQueDifere));
-        }
-        else
-        {
+            return (InicializaNoInterno(arvore, &arvoreAux, letraQueDifere, indice));
+        } else {
 
-            return (CriaNoInterno(indice, &arvoreAux, arvore, letraQueDifere));
+            return (InicializaNoInterno(&arvoreAux, arvore, letraQueDifere, indice));
         }
         /// Verifica se o i eh menor que o indice guardado no No interno
-    }
-    else if (indice < (*arvore)->NO.NInterno.Index)
-    {
+    } else if (indice < (*arvore)->NO.NInterno.Index) {
 
-        arvoreAux = CriaNoExterno(palavra);
+        arvoreAux = InicializaNoExterno(palavra);
         /// Compara a letra na posicao que diferiu com a letra escolhida para o No interno
-        if (Bit(indice, palavra) >= letraQueDifere)
-        {
+        if (Bit(indice, palavra) >= letraQueDifere) {
 
-            return (CriaNoInterno(indice, arvore, &arvoreAux, letraQueDifere));
-        }
-        else
-        {
+            return (InicializaNoInterno(arvore, &arvoreAux, letraQueDifere,indice));
+        } else {
 
-            return (CriaNoInterno(indice, &arvoreAux, arvore, letraQueDifere));
+            return (InicializaNoInterno(&arvoreAux, arvore, letraQueDifere,indice));
         }
-    }
-    else
-    {
+
+    } else {
 
         /// Nos internos, compara a letra guardada dentro do No com a letra na posicao i (onde difere), se for maior -> direita
-        if (Bit((*arvore)->NO.NInterno.Index, palavra) >= (*arvore)->NO.NInterno.LetraComparada)
-        {
+        if (Bit((*arvore)->NO.NInterno.Index, palavra) >= (*arvore)->NO.NInterno.LetraComparada){
 
             (*arvore)->NO.NInterno.Dir = InsereEntrePatricia(palavra, &(*arvore)->NO.NInterno.Dir, indice, letraQueDifere);
-        }
-        else
-        {
+        } else {
 
             (*arvore)->NO.NInterno.Esq = InsereEntrePatricia(palavra, &(*arvore)->NO.NInterno.Esq, indice, letraQueDifere);
         }
     }
+    
     return (*arvore);
 }
-int ContarPalavras(TipoArvoreApontador *arvore, char *palavra){
-    int contador = 0;
+
+void ImprimirPatricia(TipoArvoreApontador *arvore){
     if (*arvore != NULL){
-        
-        if ((*arvore)->Interno_Externo == Externo)
-        {
-            if(strcmp((*arvore)->NO.Chave, palavra))
-            {
-                (contador)++;
-            }
-        }
-        else
-        {
-            ContarPalavras(&(*arvore)->NO.NInterno.Esq, palavra);
-            ContarPalavras(&(*arvore)->NO.NInterno.Dir, palavra);
+       
+        if ((*arvore)->Interno_Externo == Externo){
+            printf("%s\n", (*arvore)->NO.Chave);
+        } else {
+            ImprimirPatricia(&(*arvore)->NO.NInterno.Esq);
+            ImprimirPatricia(&(*arvore)->NO.NInterno.Dir);
         }
     }
 }

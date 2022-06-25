@@ -27,7 +27,4 @@ TipoArvoreApontador InicializaNoInterno(TipoArvoreApontador *esq, TipoArvoreApon
 TipoArvoreApontador InicializaNoExterno(char *palavra);
 TipoArvoreApontador InserePatricia(TipoArvoreApontador *arvore, char *palavraInserir);
 TipoArvoreApontador InsereEntrePatricia(char *palavra, TipoArvoreApontador *arvore, int indice, char letraQueDifere);
-int ContarPalavras(TipoArvoreApontador *arvore, char *palavra);
-
-TipoArvoreApontador CriaNoInterno(int i, TipoArvoreApontador *Esq, TipoArvoreApontador *Dir, char letra);
-TipoArvoreApontador CriaNoExterno(char *palavra);
+void ImprimePatricia(TipoArvoreApontador *arvore);

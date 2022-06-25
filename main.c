@@ -122,10 +122,12 @@ void InsereHashEIndice(char **cadaFrase, int N)
     }
 }
 
-void InserePatriciaAAAAA(char **cadaFrase, int N){
-    // InserePatricia(TipoArvoreApontador * arvore, char *palavraInserir, int *compara);
+void InserePatriciaMenu(char **cadaFrase, int N, TipoArvoreApontador *arvore){
+    //InserePatricia(TipoArvoreApontador * arvore, char *palavraInserir, int *compara);
+    
     int i;
     char *t;
+    TipoArvoreApontador* aux = arvore;
     for (i = 0; i < N; i++)
     {
         // t -> cada palavra do arquivo
@@ -136,19 +138,24 @@ void InserePatriciaAAAAA(char **cadaFrase, int N){
             int tamanhoPalavra = strlen(t);
             char t_minusculo[tamanhoPalavra];
             minusculo(t, t_minusculo);
-            printf("\n===========\n");
-            printf("num_arquivo: %d\n", num_arquivo);
-            printf("palavra: %s\n", t_minusculo);
+          //  printf("\n===========\n");
+           // printf("num_arquivo: %d\n", num_arquivo);
+          //  printf("palavra: %s\n", t_minusculo);
       
             // strcpy(itemH.Chave, t_minusculo);
             // item.numArquivoHash = i + 1;
-            InserePatricia(&arvore, t_minusculo);
+            *aux = InserePatricia(arvore, t_minusculo);
             // VerificaInsere(itemH, peso, Tabela, num_arquivo);
-            printf("\n-----------\n");
+          //  printf("\n-----------\n");
             // printf("\nsomafinal: %Lf", (long double)soma);
             t = strtok(NULL, " ");
         }
+        
     }
+    ImprimirPatricia(aux);
+}
+void ImprimePatriciaMenu(TipoArvoreApontador *arvore){
+    ImprimirPatricia(arvore);
 }
 void ImprimeFrasesArquivos(char **cadaFrase, int N)
 {
@@ -158,6 +165,7 @@ void ImprimeFrasesArquivos(char **cadaFrase, int N)
         printf("%s\n", cadaFrase[i]);
     }
 }
+
 int main()
 {
     InicializaDicionario(Tabela);
@@ -182,6 +190,7 @@ int main()
         printf("\n4) IMPRIME TABELA\n");
         printf("\n5) IMPRIME INDICE\n");
         printf("\n6) INSERE PATRICIA\n");
+        printf("\n7) IMPRIME PATRICIA\n");
         printf("\n0) SAIR\n");
 
         printf("\nESCOLHA: ");
@@ -214,8 +223,10 @@ int main()
             // ImprimeQntd(listaQnd);
             break;
         case 6:
-            InserePatriciaAAAAA(cadaFrase, N);
+            InserePatriciaMenu(cadaFrase, N, &arvore);
             break;
+        case 7:
+            ImprimePatriciaMenu(&arvore);
         }
     }
 
