@@ -1,0 +1,2 @@
+função minisculo
+https://wagnergaspar.com/como-converter-uma-string-em-maiusculo-ou-minusculo-em-qualquer-so-com-a-linguagem-c/#:~:text=Para%20isso%20podemos%20utilizar%20as,retorna%20sua%20vers%C3%A3o%20em%20min%C3%BAsculo.
